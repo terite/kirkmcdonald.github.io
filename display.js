@@ -81,8 +81,12 @@ function itemUpdate() {
         var rate = target.getRate()
         rates[target.itemName] = rate
     }
+    console.time('solver.solve')
     globalTotals = solver.solve(rates, spec.ignore, spec)
+    console.timeEnd('solver.solve')
+    console.time('display')
     display()
+    console.timeEnd('display')
 }
 
 function Header(name, colSpan) {
@@ -994,8 +998,14 @@ function display() {
     if (currentTab == "graph_tab") {
         renderGraph(totals, spec.ignore)
     }
+
+    console.time('display.recipeTable.displaySolution')
     recipeTable.displaySolution(totals)
+    console.timeEnd('display.recipeTable.displaySolution')
+
+    console.time('display.renderDebug')
     renderDebug()
+    console.timeEnd('display.renderDebug')
 
     timesDisplayed = timesDisplayed.add(one)
     var dc = document.getElementById("display_count")
