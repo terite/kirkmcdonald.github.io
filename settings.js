@@ -11,8 +11,15 @@ var MODIFICATIONS = {
     "0-16-37x": new Modification("Vanilla 0.16.37 - Expensive", "vanilla-0.16.37-expensive.json"),
     //"bobs-0-15-35": new Modification("Bob's Mods + base 0.15.35", "bobs-0.15.35.json")
 }
-
 var DEFAULT_MODIFICATION = "0-16-37"
+
+var match = /calc-([a-f0-9]+)\.html$/.exec(location.pathname)
+if (match) {
+    MODIFICATIONS = {
+        "uploaded-save": new Modification("Uploaded Save", match[1] + ".json"),
+    }
+    DEFAULT_MODIFICATION = "uploaded-save"
+}
 
 function renderDataSetOptions(settings) {
     var modSelector = document.getElementById("data_set")
