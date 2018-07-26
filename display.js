@@ -995,17 +995,23 @@ function display() {
 
     window.location.hash = "#" + formatSettings()
 
-    if (currentTab == "graph_tab") {
-        renderGraph(totals, spec.ignore)
+    if (currentTab == "totals_tab") {
+        console.time('display.recipeTable.displaySolution')
+        recipeTable.displaySolution(totals)
+        console.timeEnd('display.recipeTable.displaySolution')
     }
 
-    console.time('display.recipeTable.displaySolution')
-    recipeTable.displaySolution(totals)
-    console.timeEnd('display.recipeTable.displaySolution')
+    if (currentTab == "graph_tab") {
+        console.time('renderGraph')
+        renderGraph(totals, spec.ignore)
+        console.timeEnd('renderGraph')
+    }
 
-    console.time('display.renderDebug')
-    renderDebug()
-    console.timeEnd('display.renderDebug')
+    if (currentTab == "debug_tab") {
+        console.time('display.renderDebug')
+        renderDebug()
+        console.timeEnd('display.renderDebug')
+    }
 
     timesDisplayed = timesDisplayed.add(one)
     var dc = document.getElementById("display_count")

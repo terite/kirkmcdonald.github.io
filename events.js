@@ -461,7 +461,7 @@ function clickTab(tabName) {
     var button = document.getElementById(tabMap[tabName])
     button.classList.add("active")
     if (initDone) {
-        window.location.hash = "#" + formatSettings()
+        display()
     }
 }
 
