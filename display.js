@@ -1,8 +1,11 @@
 "use strict"
 
-function formatName(name) {
-    name = name.replace(new RegExp("-", 'g'), " ")
-    return name[0].toUpperCase() + name.slice(1)
+function formatName(obj) {
+    if (obj.localised_name) {
+        return "[en]" + obj.localised_name.en + ' (' + obj.name + ')'
+    }
+    name = obj.name.replace(new RegExp("-", 'g'), " ")
+    return "[N]" + name[0].toUpperCase() + name.slice(1)
 }
 
 function displayRate(x) {
@@ -147,9 +150,9 @@ BeltIcon.prototype = {
         var t = document.createElement("div")
         t.classList.add("frame")
         var title = document.createElement("h3")
-        var im = getImage(this, true)
+        var im = getImage(this, true)  // TODO: convert to this.item?
         title.appendChild(im)
-        title.appendChild(new Text(formatName(this.name)))
+        title.appendChild(new Text(formatName(this.item)))
         t.appendChild(title)
         var b = document.createElement("b")
         b.textContent = "Max throughput: "

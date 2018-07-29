@@ -1,7 +1,8 @@
 "use strict"
 
-function FactoryDef(name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel) {
+function FactoryDef(name, localised_name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel) {
     this.name = name
+    this.localised_name = localised_name
     this.icon_col = col
     this.icon_row = row
     this.categories = categories
@@ -31,7 +32,7 @@ FactoryDef.prototype = {
         var title = document.createElement("h3")
         var im = getImage(this, true)
         title.appendChild(im)
-        title.appendChild(new Text(formatName(this.name)))
+        title.appendChild(new Text(formatName(this)))
         t.appendChild(title)
         var b
         if (this.max_ing) {
@@ -59,8 +60,8 @@ FactoryDef.prototype = {
     }
 }
 
-function MinerDef(name, col, row, categories, power, speed, moduleSlots, energyUsage, fuel) {
-    FactoryDef.call(this, name, col, row, categories, 0, 0, moduleSlots, energyUsage, fuel)
+function MinerDef(name, localised_name, col, row, categories, power, speed, moduleSlots, energyUsage, fuel) {
+    FactoryDef.call(this, name, localised_name, col, row, categories, 0, 0, moduleSlots, energyUsage, fuel)
     this.mining_power = power
     this.mining_speed = speed
 }
@@ -80,7 +81,7 @@ MinerDef.prototype.renderTooltip = function() {
     var title = document.createElement("h3")
     var im = getImage(this, true)
     title.appendChild(im)
-    title.appendChild(new Text(formatName(this.name)))
+    title.appendChild(new Text(formatName(this)))
     t.appendChild(title)
     var b = document.createElement("b")
     b.textContent = "Energy consumption: "
@@ -415,7 +416,7 @@ function renderTooltipBase() {
     var title = document.createElement("h3")
     var im = getImage(this, true)
     title.appendChild(im)
-    title.appendChild(new Text(formatName(this.name)))
+    title.appendChild(new Text(formatName(this)))
     t.appendChild(title)
     return t
 }
@@ -425,6 +426,7 @@ function getFactories(data) {
     var pumpDef = data["offshore-pump"]["offshore-pump"]
     var pump = new FactoryDef(
         "offshore-pump",
+        pumpDef.localised_name,
         pumpDef.icon_col,
         pumpDef.icon_row,
         ["water"],
@@ -439,6 +441,7 @@ function getFactories(data) {
     var reactorDef = data["reactor"]["nuclear-reactor"]
     var reactor = new FactoryDef(
         "nuclear-reactor",
+        reactorDef.localised_name,
         reactorDef.icon_col,
         reactorDef.icon_row,
         ["nuclear"],
@@ -459,6 +462,7 @@ function getFactories(data) {
             }
             factories.push(new FactoryDef(
                 d.name,
+                d.localised_name,
                 d.icon_col,
                 d.icon_row,
                 d.crafting_categories,
@@ -481,6 +485,7 @@ function getFactories(data) {
         }
         factories.push(new MinerDef(
             d.name,
+            d.localised_name,
             d.icon_col,
             d.icon_row,
             ["mining-basic-solid"],

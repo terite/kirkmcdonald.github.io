@@ -1,8 +1,9 @@
 "use strict"
 
-function Module(name, col, row, category, order, productivity, speed, power, limit) {
+function Module(name, localised_name, col, row, category, order, productivity, speed, power, limit) {
     // Other module effects not modeled by this calculator.
     this.name = name
+    this.localised_name = localised_name
     this.icon_col = col
     this.icon_row = row
     this.category = category
@@ -43,7 +44,7 @@ Module.prototype = {
         var title = document.createElement("h3")
         var im = getImage(this, true)
         title.appendChild(im)
-        title.appendChild(new Text(formatName(this.name)))
+        title.appendChild(new Text(formatName(this)))
         t.appendChild(title)
         var b
         var hundred = RationalFromFloat(100)
@@ -114,6 +115,7 @@ function getModules(data) {
         var limit = item.limitation
         modules[name] = new Module(
             name,
+            item.localised_name,
             item.icon_col,
             item.icon_row,
             category,

@@ -16,8 +16,9 @@ function makeIngredient(data, i, items) {
     return new Ingredient(RationalFromFloat(amount), getItem(data, items, i.name))
 }
 
-function Recipe(name, col, row, category, time, ingredients, products) {
+function Recipe(name, localised_name, col, row, category, time, ingredients, products) {
     this.name = name
+    this.localised_name = localised_name
     this.icon_col = col
     this.icon_row = row
     this.category = category
@@ -81,7 +82,7 @@ Recipe.prototype = {
         var title = document.createElement("h3")
         var im = getImage(this, true)
         title.appendChild(im)
-        var name = formatName(this.name)
+        var name = formatName(this)
         if (this.products.length === 1 && this.products[0].item.name === this.name && one.less(this.products[0].amount)) {
             name = this.products[0].amount.toDecimal() + " \u00d7 " + name
         }
@@ -121,7 +122,7 @@ Recipe.prototype = {
             p.classList.add("product")
             p.appendChild(getImage(ing.item, true))
             t.appendChild(p)
-            t.appendChild(new Text("\u00A0" + ing.amount.toDecimal() + " \u00d7 " + formatName(ing.item.name)))
+            t.appendChild(new Text("\u00A0" + ing.amount.toDecimal() + " \u00d7 " + formatName(ing.item)))
         }
         return t
     }
@@ -137,24 +138,24 @@ function makeRecipe(data, d, items) {
     for (var i=0; i < d.ingredients.length; i++) {
         ingredients.push(makeIngredient(data, d.ingredients[i], items))
     }
-    return new Recipe(d.name, d.icon_col, d.icon_row, d.category, time, ingredients, products)
+    return new Recipe(d.name, d.localised_name, d.icon_col, d.icon_row, d.category, time, ingredients, products)
 }
 
 function ResourceRecipe(item) {
-    Recipe.call(this, item.name, item.icon_col, item.icon_row, null, zero, [], [new Ingredient(one, item)])
+    Recipe.call(this, item.name, item.localised_name, item.icon_col, item.icon_row, null, zero, [], [new Ingredient(one, item)])
 }
 ResourceRecipe.prototype = Object.create(Recipe.prototype)
 ResourceRecipe.prototype.makesResource = function() {
     return true
 }
 
-function MiningRecipe(name, col, row, category, hardness, mining_time, ingredients, products) {
+function MiningRecipe(name, localised_name, col, row, category, hardness, mining_time, ingredients, products) {
     this.hardness = hardness
     this.mining_time = mining_time
     if (!ingredients) {
         ingredients = []
     }
-    Recipe.call(this, name, col, row, category, zero, ingredients, products)
+    Recipe.call(this, name, localised_name, col, row, category, zero, ingredients, products)
 }
 MiningRecipe.prototype = Object.create(Recipe.prototype)
 MiningRecipe.prototype.makesResource = function() {
@@ -174,6 +175,7 @@ function getRecipeGraph(data) {
     var water = getItem(data, items, "water")
     recipes["water"] = new Recipe(
         "water",
+        water.localised_name,
         water.icon_col,
         water.icon_row,
         "water",
@@ -184,6 +186,7 @@ function getRecipeGraph(data) {
     var reactor = data.items["nuclear-reactor"]
     recipes["nuclear-reactor-cycle"] = new Recipe(
         "nuclear-reactor-cycle",
+        ["", "Nuclear Reactor Cycle"],
         reactor.icon_col,
         reactor.icon_row,
         "nuclear",
@@ -197,6 +200,7 @@ function getRecipeGraph(data) {
     var rocket = data.items["rocket-silo"]
     recipes["rocket-launch"] = new Recipe(
         "rocket-launch",
+        ["", "Rocket Launch"],
         rocket.icon_col,
         rocket.icon_row,
         null,
@@ -239,6 +243,7 @@ function getRecipeGraph(data) {
         }
         recipes[name] = new MiningRecipe(
             name,
+            entity.localised_name,
             entity.icon_col,
             entity.icon_row,
             "mining-" + category,

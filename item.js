@@ -1,7 +1,8 @@
 "use strict"
 
-function Item(name, col, row, phase, group, subgroup, order) {
+function Item(name, localised_name, col, row, phase, group, subgroup, order) {
     this.name = name
+    this.localised_name = localised_name
     this.icon_col = col
     this.icon_row = row
     this.recipes = []
@@ -52,7 +53,7 @@ Item.prototype = {
         var title = document.createElement("h3")
         var im = getImage(this, true)
         title.appendChild(im)
-        title.appendChild(new Text(formatName(this.name)))
+        title.appendChild(new Text(formatName(this)))
         t.appendChild(title)
         if (extra) {
             t.appendChild(extra)
@@ -74,6 +75,7 @@ function getItem(data, items, name) {
         }
         var item = new Item(
             name,
+            d.localised_name,
             d.icon_col,
             d.icon_row,
             phase,
@@ -92,6 +94,7 @@ function getItems(data) {
     var reactor = data.items["nuclear-reactor"]
     items[cycleName] = new Item(
         cycleName,
+        ["", "Nuclear Reactor Cycle"],
         reactor.icon_col,
         reactor.icon_row,
         "abstract",
