@@ -1,17 +1,21 @@
 "use strict"
 
-function Rational(p, q, gcd) {
+function Rational(p, q) {
     if (q.lesser(bigInt.zero)) {
         p = bigInt.zero.minus(p)
         q = bigInt.zero.minus(q)
     }
-    if (!gcd) {
-        gcd = bigInt.gcd(p.abs(), q)
+
+    if (p.isZero()) {
+        q = bigInt.one
+    } else {
+        var gcd = bigInt.gcd(p.abs(), q)
+        if (gcd.greater(bigInt.one)) {
+            p = p.divide(gcd)
+            q = q.divide(gcd)
+        }
     }
-    if (gcd.greater(bigInt.one)) {
-        p = p.divide(gcd)
-        q = q.divide(gcd)
-    }
+
     this.p = p
     this.q = q
 }
@@ -129,15 +133,19 @@ Rational.prototype = {
     mul: function(other) {
         return new Rational(
             this.p.times(other.p),
-            this.q.times(other.q),
-            bigInt.gcd(this.p, other.q).times(bigInt.gcd(this.q, other.p))
+            this.q.times(other.q)
         )
     },
     div: function(other) {
         return new Rational(
             this.p.times(other.q),
-            this.q.times(other.p),
-            bigInt.gcd(this.p, other.p).times(bigInt.gcd(this.q, other.q))
+            this.q.times(other.p)
+        )
+    },
+    invert: function() {
+        return new Rational(
+            this.q,
+            this.p
         )
     },
     divmod: function(other) {
@@ -194,3 +202,7 @@ var one = new Rational(bigInt.one, bigInt.one)
 var half = new Rational(bigInt.one, bigInt(2))
 var oneThird = new Rational(bigInt.one, bigInt(3))
 var twoThirds = new Rational(bigInt(2), bigInt(3))
+
+if (typeof(module) !== 'undefined') {
+    module.exports.Rational = Rational;
+}
