@@ -7,9 +7,10 @@ function Matrix(rows, cols, mat) {
     if (mat) {
         this.mat = mat
     } else {
-        this.mat = []
-        for (var i = 0; i < rows * cols; i++) {
-            this.mat.push(zero)
+        var size = rows * cols
+        var mat = this.mat = new Array(size)
+        for (var i = 0; i < size; i++) {
+            mat[i] = zero
         }
     }
 }
