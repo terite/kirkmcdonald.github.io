@@ -113,8 +113,11 @@ Rational.prototype = {
         return this.p.times(other.q).lesser(this.q.times(other.p))
     },
     abs: function() {
-        if (this.less(zero)) {
-            return this.mul(minusOne)
+        if (this.p.isNegative()) {
+            return new Rational(
+                this.p.abs(),
+                this.q
+            )
         }
         return this
     },
