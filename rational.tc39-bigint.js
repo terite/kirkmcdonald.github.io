@@ -2,21 +2,33 @@
 
 // https://github.com/tc39/proposal-bigint
 
-if (false && window.BigInt) {
+if (window.BigInt) {
+    var biZero = BigInt(0)
+    var biOne = BigInt(1)
+
     console.log("Using chrome BigInt");
     function calc_gcd(a, b) {
+        a = BigInt.abs(a)
+        b = BigInt.abs(b)
         if (b) {
             return calc_gcd(b, a % b);
         }
         return a;
     }
 
+    BigInt.abs = (n) => {
+        if (n < biZero) {
+            n = biZero - n
+        }
+        return n
+    }
+
 
     BigInt.ceil = (p, q) => {
         var divmod = BigInt.divmod(p, q)
         var result = divmod.quotient
-        if (divmod.remainder > BigInt(0)) {
-            result = result + BigInt(1)
+        if (divmod.remainder > biZero) {
+            result = result + biOne
         }
         return result
     }
@@ -120,13 +132,13 @@ if (false && window.BigInt) {
         ceil: function() {
             return new Rational(
                 BigInt.ceil(this.p, this.q),
-                BigInt(1)
+                biOne
             )
         },
         floor: function() {
             return new Rational(
                 this.p / this.q,
-                BigInt(1)
+                biOne
             )
         },
         equal: function(other) {

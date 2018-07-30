@@ -74,7 +74,9 @@ function Solver(items, recipes) {
     this.items = items
     this.recipes = recipes
     this.disabledRecipes = {}
+    console.time('findGroups')
     var groups = findGroups(items, recipes)
+    console.timeEnd('findGroups')
     this.matrixSolvers = []
     for (var i = 0; i < groups.length; i++) {
         var group = groups[i]
