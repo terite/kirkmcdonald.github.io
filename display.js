@@ -2,7 +2,7 @@
 
 function formatName(obj) {
     if (obj.localised_name) {
-        return "[en]" + obj.localised_name.en + ' (' + obj.name + ')'
+        return obj.localised_name.en
     }
     name = obj.name.replace(new RegExp("-", 'g'), " ")
     return "[N]" + name[0].toUpperCase() + name.slice(1)
