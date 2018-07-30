@@ -186,7 +186,7 @@ function getRecipeGraph(data) {
     var reactor = data.items["nuclear-reactor"]
     recipes["nuclear-reactor-cycle"] = new Recipe(
         "nuclear-reactor-cycle",
-        ["", "Nuclear Reactor Cycle"],
+        null,
         reactor.icon_col,
         reactor.icon_row,
         "nuclear",
@@ -200,7 +200,7 @@ function getRecipeGraph(data) {
     var rocket = data.items["rocket-silo"]
     recipes["rocket-launch"] = new Recipe(
         "rocket-launch",
-        ["", "Rocket Launch"],
+        null,
         rocket.icon_col,
         rocket.icon_row,
         null,

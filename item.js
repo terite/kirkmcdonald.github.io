@@ -94,7 +94,7 @@ function getItems(data) {
     var reactor = data.items["nuclear-reactor"]
     items[cycleName] = new Item(
         cycleName,
-        ["", "Nuclear Reactor Cycle"],
+        null,
         reactor.icon_col,
         reactor.icon_row,
         "abstract",
