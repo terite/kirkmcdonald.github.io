@@ -11,39 +11,39 @@
 function pipeThroughput(length) {
     if (length.equal(zero)) {
         // A length of zero represents a solid line of pumps.
-        return RationalFromFloat(12000)
-    } else if (length.less(RationalFromFloat(198))) {
-        var numerator = RationalFromFloat(50).mul(length).add(RationalFromFloat(150))
-        var denominator = RationalFromFloat(3).mul(length).sub(one)
-        return numerator.div(denominator).mul(RationalFromFloat(60))
+        return Rational.fromFloat(12000)
+    } else if (length.less(Rational.fromFloat(198))) {
+        var numerator = Rational.fromFloat(50).mul(length).add(Rational.fromFloat(150))
+        var denominator = Rational.fromFloat(3).mul(length).sub(one)
+        return numerator.div(denominator).mul(Rational.fromFloat(60))
     } else {
-        return RationalFromFloat(60*4000).div(RationalFromFloat(39).add(length))
+        return Rational.fromFloat(60*4000).div(Rational.fromFloat(39).add(length))
     }
 }
 
 // Throughput at which pipe length equation changes.
-var pipeThreshold = RationalFromFloats(4000, 236)
+var pipeThreshold = Rational.fromFloats(4000, 236)
 
 // For fluid throughput in fluid/s, returns maximum length of pipe that can
 // support it.
 function pipeLength(throughput) {
-    throughput = throughput.div(RationalFromFloat(60))
-    if (RationalFromFloat(200).less(throughput)) {
+    throughput = throughput.div(Rational.fromFloat(60))
+    if (Rational.fromFloat(200).less(throughput)) {
         return null
-    } else if (RationalFromFloat(100).less(throughput)) {
+    } else if (Rational.fromFloat(100).less(throughput)) {
         return zero
     } else if (pipeThreshold.less(throughput)) {
-        var numerator = throughput.add(RationalFromFloat(150))
-        var denominator = RationalFromFloat(3).mul(throughput).sub(RationalFromFloat(50))
+        var numerator = throughput.add(Rational.fromFloat(150))
+        var denominator = Rational.fromFloat(3).mul(throughput).sub(Rational.fromFloat(50))
         return numerator.div(denominator)
     } else {
-        return RationalFromFloat(4000).div(throughput).sub(RationalFromFloat(39))
+        return Rational.fromFloat(4000).div(throughput).sub(Rational.fromFloat(39))
     }
 }
 
 // Arbitrarily use a default with a minimum length of 17.
 function defaultPipe(rate) {
-    var pipes = rate.div(RationalFromFloat(1200)).ceil()
+    var pipes = rate.div(Rational.fromFloat(1200)).ceil()
     var perPipeRate = rate.div(pipes)
     var length = pipeLength(perPipeRate).ceil()
     return {pipes: pipes, length: length}
@@ -52,7 +52,7 @@ function defaultPipe(rate) {
 function PipeConfig(rate) {
     this.rate = rate
     var def = defaultPipe(rate)
-    this.minLanes = rate.div(RationalFromFloat(12000)).ceil()
+    this.minLanes = rate.div(Rational.fromFloat(12000)).ceil()
     this.element = document.createElement("td")
     var pipeItem = solver.items["pipe"]
     this.element.appendChild(getImage(pipeItem))
@@ -80,7 +80,7 @@ function PipeConfig(rate) {
 PipeConfig.prototype = {
     constructor: PipeConfig,
     setPipes: function(pipeString) {
-        var pipes = RationalFromString(pipeString)
+        var pipes = Rational.fromString(pipeString)
         if (pipes.less(this.minLanes)) {
             pipes = this.minLanes
             this.laneInput.value = pipes.toDecimal(0)
@@ -90,7 +90,7 @@ PipeConfig.prototype = {
         this.lengthInput.value = length.toDecimal(0)
     },
     setLength: function(lengthString) {
-        var length = RationalFromString(lengthString)
+        var length = Rational.fromString(lengthString)
         var perPipeRate = pipeThroughput(length)
         var pipes = this.rate.div(perPipeRate).ceil()
         this.laneInput.value = pipes.toDecimal(0)

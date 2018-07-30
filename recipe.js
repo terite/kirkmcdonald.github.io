@@ -13,7 +13,7 @@ function makeIngredient(data, i, items) {
         amount = (i.amount_min + i.amount_max) / 2
     }
     amount *= i.probability || 1
-    return new Ingredient(RationalFromFloat(amount), getItem(data, items, i.name))
+    return new Ingredient(Rational.fromFloat(amount), getItem(data, items, i.name))
 }
 
 function Recipe(name, localised_name, col, row, category, time, ingredients, products) {
@@ -129,7 +129,7 @@ Recipe.prototype = {
 }
 
 function makeRecipe(data, d, items) {
-    var time = RationalFromFloat(d.energy_required)
+    var time = Rational.fromFloat(d.energy_required)
     var products = []
     for (var i=0; i < d.results.length; i++) {
         products.push(makeIngredient(data, d.results[i], items))
@@ -179,7 +179,7 @@ function getRecipeGraph(data) {
         water.icon_col,
         water.icon_row,
         "water",
-        RationalFromFloats(1, 1200),
+        Rational.fromFloats(1, 1200),
         [],
         [new Ingredient(one, water)]
     )
@@ -190,7 +190,7 @@ function getRecipeGraph(data) {
         reactor.icon_col,
         reactor.icon_row,
         "nuclear",
-        RationalFromFloat(200),
+        Rational.fromFloat(200),
         [new Ingredient(one, getItem(data, items, "uranium-fuel-cell"))],
         [
             new Ingredient(one, getItem(data, items, "used-up-uranium-fuel-cell")),
@@ -206,9 +206,9 @@ function getRecipeGraph(data) {
         null,
         one,
         [
-            new Ingredient(RationalFromFloat(100), getItem(data, items, "rocket-part")),
+            new Ingredient(Rational.fromFloat(100), getItem(data, items, "rocket-part")),
             new Ingredient(one, getItem(data, items, "satellite"))
-        ], [new Ingredient(RationalFromFloat(1000), getItem(data, items, "space-science-pack"))]
+        ], [new Ingredient(Rational.fromFloat(1000), getItem(data, items, "space-science-pack"))]
     )
 
     for (var name in data.recipes) {
@@ -233,7 +233,7 @@ function getRecipeGraph(data) {
         var ingredients = null
         if ("required_fluid" in props) {
             ingredients = [new Ingredient(
-                RationalFromFloat(props.fluid_amount / 10),
+                Rational.fromFloat(props.fluid_amount / 10),
                 items[props.required_fluid]
             )]
         }
@@ -247,8 +247,8 @@ function getRecipeGraph(data) {
             entity.icon_col,
             entity.icon_row,
             "mining-" + category,
-            RationalFromFloat(props.hardness),
-            RationalFromFloat(props.mining_time),
+            Rational.fromFloat(props.hardness),
+            Rational.fromFloat(props.mining_time),
             ingredients,
             products
         )

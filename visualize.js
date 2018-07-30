@@ -254,7 +254,7 @@ function renderGraph(totals, ignore) {
     inner.attr("transform", "translate(" + xCenterOffset + ", " + yCenterOffset + ")")
 
     var minWidth = one
-    var maxWidth = RationalFromFloat(8)
+    var maxWidth = Rational.fromFloat(8)
     var widthRange = maxWidth.sub(minWidth)
     var rateRange = graph.max.sub(graph.min)
     var widthFactor

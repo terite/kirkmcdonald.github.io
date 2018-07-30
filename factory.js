@@ -184,7 +184,7 @@ Factory.prototype = {
                 power = power.add(beaconModule.power.mul(this.beaconCount).mul(half))
             }
         }
-        var minimum = RationalFromFloats(1, 5)
+        var minimum = Rational.fromFloats(1, 5)
         if (power.less(minimum)) {
             power = minimum
         }
@@ -196,7 +196,7 @@ Factory.prototype = {
             return {"fuel": this.factory.fuel, "power": power.mul(count)}
         }
         // Default drain value.
-        var drain = power.div(RationalFromFloat(30))
+        var drain = power.div(Rational.fromFloat(30))
         var divmod = count.divmod(one)
         power = power.mul(count)
         if (!divmod.remainder.isZero()) {
@@ -473,9 +473,9 @@ function getFactories(data) {
                 d.icon_row,
                 d.crafting_categories,
                 d.ingredient_count,
-                RationalFromFloat(d.crafting_speed),
+                Rational.fromFloat(d.crafting_speed),
                 d.module_slots,
-                RationalFromFloat(d.energy_usage),
+                Rational.fromFloat(d.energy_usage),
                 fuel
             ))
         }
@@ -495,10 +495,10 @@ function getFactories(data) {
             d.icon_col,
             d.icon_row,
             ["mining-basic-solid"],
-            RationalFromFloat(d.mining_power),
-            RationalFromFloat(d.mining_speed),
+            Rational.fromFloat(d.mining_power),
+            Rational.fromFloat(d.mining_speed),
             d.module_slots,
-            RationalFromFloat(d.energy_usage),
+            Rational.fromFloat(d.energy_usage),
             fuel
         ))
     }

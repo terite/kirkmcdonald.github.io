@@ -156,10 +156,10 @@ Rational.prototype = {
     },
 }
 
-function RationalFromString(s) {
+Rational.fromString = function fromString(s) {
     var i = s.indexOf("/")
     if (i === -1) {
-        return RationalFromFloat(Number(s))
+        return Rational.fromFloat(Number(s))
     }
     var j = s.indexOf("+")
     var q = bigInt(s.slice(i + 1))
@@ -176,9 +176,9 @@ function RationalFromString(s) {
 var _one_third = new Rational(bigInt(3333), bigInt(10000))
 var _two_thirds = new Rational(bigInt(3333), bigInt(5000))
 
-function RationalFromFloat(x) {
+Rational.fromFloat = function fromFloat(x) {
     if (Number.isInteger(x)) {
-        return RationalFromFloats(x, 1)
+        return Rational.fromFloats(x, 1)
     }
     // Sufficient precision for our data?
     var r = new Rational(bigInt(Math.round(x * 10000)), bigInt(10000))
@@ -192,7 +192,7 @@ function RationalFromFloat(x) {
     return r
 }
 
-function RationalFromFloats(p, q) {
+Rational.fromFloats = function fromFloats(p, q) {
     return new Rational(bigInt(p), bigInt(q))
 }
 

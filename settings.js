@@ -79,8 +79,8 @@ function setColorScheme(schemeName) {
 
 // display rate
 var seconds = one
-var minutes = RationalFromFloat(60)
-var hours = RationalFromFloat(3600)
+var minutes = Rational.fromFloat(60)
+var hours = Rational.fromFloat(3600)
 
 var displayRates = {
     "s": seconds,
@@ -319,7 +319,7 @@ function setKovarex(enabled) {
 // belt
 function Belt(name, speed) {
     this.name = name
-    this.speed = RationalFromFloats(speed, 60)
+    this.speed = Rational.fromFloats(speed, 60)
 }
 
 // XXX: Should derive this from the game data. Mods may add new belt types.
@@ -364,7 +364,7 @@ function setPreferredBelt(name) {
 }
 
 // pipe
-var DEFAULT_PIPE = RationalFromFloat(17)
+var DEFAULT_PIPE = Rational.fromFloat(17)
 
 var minPipeLength = DEFAULT_PIPE
 var maxPipeThroughput = null
@@ -379,7 +379,7 @@ function renderPipe(settings) {
 }
 
 function setMinPipe(lengthString) {
-    minPipeLength = RationalFromString(lengthString)
+    minPipeLength = Rational.fromString(lengthString)
     maxPipeThroughput = pipeThroughput(minPipeLength)
 }
 
@@ -398,7 +398,7 @@ function renderMiningProd(settings) {
 
 function getMprod() {
     var mprod = document.getElementById("mprod").value
-    return RationalFromFloats(Number(mprod), 100)
+    return Rational.fromFloats(Number(mprod), 100)
 }
 
 // default module
@@ -441,7 +441,7 @@ function renderDefaultBeacon(settings) {
         defaultBeacon = shortModules[settings.db]
     }
     if ("dbc" in settings) {
-        defaultCount = RationalFromString(settings.dbc)
+        defaultCount = Rational.fromString(settings.dbc)
     }
     spec.setDefaultBeacon(defaultBeacon, defaultCount)
 

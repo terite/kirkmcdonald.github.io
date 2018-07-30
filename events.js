@@ -242,7 +242,7 @@ function changeDefaultBeacon(event) {
 
 // Triggered when the default beacon count is changed.
 function changeDefaultBeaconCount(event) {
-    var count = RationalFromString(event.target.value)
+    var count = Rational.fromString(event.target.value)
     spec.setDefaultBeacon(spec.defaultBeacon, count)
     recipeTable.updateDisplayedModules()
     itemUpdate()
@@ -346,7 +346,7 @@ function BeaconHandler(recipeName) {
 // Triggered when a beacon module count is changed.
 function BeaconCountHandler(recipeName) {
     this.handleEvent = function(event) {
-        var moduleCount = RationalFromString(event.target.value)
+        var moduleCount = Rational.fromString(event.target.value)
         var factory = getFactory(recipeName)
         factory.beaconCount = moduleCount
         if (isFactoryTarget(recipeName) && factory.beaconModule) {

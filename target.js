@@ -168,7 +168,7 @@ BuildTarget.prototype = {
         this.changedFactory = true
         this.factoryLabel.classList.add(SELECTED_INPUT)
         this.rateLabel.classList.remove(SELECTED_INPUT)
-        this.factoriesValue = RationalFromString(this.factories.value)
+        this.factoriesValue = Rational.fromString(this.factories.value)
         this.rateValue = zero
         this.rate.value = ""
     },
@@ -181,7 +181,7 @@ BuildTarget.prototype = {
         this.factoryLabel.classList.remove(SELECTED_INPUT)
         this.rateLabel.classList.add(SELECTED_INPUT)
         this.factoriesValue = zero
-        this.rateValue = RationalFromString(this.rate.value).div(displayRateFactor)
+        this.rateValue = Rational.fromString(this.rate.value).div(displayRateFactor)
         this.factories.value = ""
     },
     setRate: function(rate) {

@@ -58,7 +58,7 @@ function alignPower(x, prec) {
     if (prec === undefined) {
         prec = countPrecision
     }
-    var thousand = RationalFromFloat(1000)
+    var thousand = Rational.fromFloat(1000)
     var i = 0
     while (thousand.less(x) && i < powerSuffixes.length - 1) {
         x = x.div(thousand)

@@ -14,7 +14,7 @@ Fuel.prototype = {
     constructor: Fuel,
     valueString: function() {
         var x = this.value
-        var thousand = RationalFromFloat(1000)
+        var thousand = Rational.fromFloat(1000)
         var i = 0
         while (thousand.less(x) && i < energySuffixes.length - 1) {
             x = x.div(thousand)
@@ -39,7 +39,7 @@ function getFuel(data, items) {
             d.icon_row,
             getItem(data, items, fuelName),
             d.fuel_category,
-            RationalFromFloat(d.fuel_value)
+            Rational.fromFloat(d.fuel_value)
         )
         var f = fuelCategories[fuel.category]
         if (!f) {

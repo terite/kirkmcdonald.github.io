@@ -43,7 +43,7 @@ function formatSettings() {
         settings += "pipe=" + minPipeLength.toDecimal(0) + "&"
     }
     if (!spec.miningProd.isZero()) {
-        var hundred = RationalFromFloat(100)
+        var hundred = Rational.fromFloat(100)
         var mprod = spec.miningProd.mul(hundred).toString()
         settings += "mprod=" + mprod + "&"
     }

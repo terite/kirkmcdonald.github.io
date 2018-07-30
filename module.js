@@ -47,7 +47,7 @@ Module.prototype = {
         title.appendChild(new Text(formatName(this)))
         t.appendChild(title)
         var b
-        var hundred = RationalFromFloat(100)
+        var hundred = Rational.fromFloat(100)
         var first = false
         if (!this.power.isZero()) {
             var power = this.power.mul(hundred)
@@ -109,9 +109,9 @@ function getModules(data) {
         var effect = item.effect
         var category = item.category
         var order = item.order
-        var speed = RationalFromFloat((effect.speed || {}).bonus || 0)
-        var productivity = RationalFromFloat((effect.productivity || {}).bonus || 0)
-        var power = RationalFromFloat((effect.consumption || {}).bonus || 0)
+        var speed = Rational.fromFloat((effect.speed || {}).bonus || 0)
+        var productivity = Rational.fromFloat((effect.productivity || {}).bonus || 0)
+        var power = Rational.fromFloat((effect.consumption || {}).bonus || 0)
         var limit = item.limitation
         modules[name] = new Module(
             name,
