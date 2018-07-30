@@ -25,13 +25,11 @@ function MatrixSolver(recipes) {
     this.outputs = {}
     // Array of items produced by this matrix.
     this.outputItems = []
-    // Map from item name to waste-item column (minus offset).
-    var wasteItems = {}
+
     for (var itemName in products) {
         var item = products[itemName]
         this.outputs[item.name] = item
         items.push(item)
-        wasteItems[item.name] = this.outputItems.length
         this.outputItems.push(item)
     }
     // Array of the recipes that produce the "inputs" to this matrix.
