@@ -51,12 +51,8 @@ function MatrixSolver(recipes) {
         itemIndexes[items[i].name] = i
     }
     this.recipeIndexes = {}
-    this.inputColumns = []
     for (var i = 0; i < allRecipes.length; i++) {
         this.recipeIndexes[allRecipes[i].name] = i
-        if (i >= recipeArray.length) {
-            this.inputColumns.push(i)
-        }
     }
     var rows = allRecipes.length + 2
     var cols = items.length + allRecipes.length + 3
