@@ -44,6 +44,7 @@ function pivotCol(A, col) {
 }
 
 function simplex(A) {
+    console.log("Simplexing a", A.cols, "x", A.rows, "matrix")
     while (true) {
         var min = null
         var minCol = null

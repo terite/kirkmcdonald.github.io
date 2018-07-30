@@ -3,6 +3,7 @@
 var PRIORITY = ["uranium-ore", "steam", "crude-oil", "coal", "water"]
 
 function MatrixSolver(recipes) {
+    console.log("Creating a matrix solver for", recipes)
     var products = {}
     var ingredients = {}
     var recipeArray = []
@@ -147,6 +148,7 @@ MatrixSolver.prototype = {
         }
     },
     solveFor: function(products, spec, disabled) {
+        console.log("solving for", products)
         var A = this.matrix.copy()
         for (var itemName in products) {
             if (itemName in this.itemIndexes) {
@@ -211,6 +213,7 @@ MatrixSolver.prototype = {
             }
         }
         this.lastSolution = A
+        console.log("solved", {solution: solution, waste: waste})
         return {solution: solution, waste: waste}
     }
 }
