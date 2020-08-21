@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.*/
 "use strict"
 
-function FactoryDef(name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel) {
+function FactoryDef(name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel, localized_name) {
     this.name = name
     this.icon_col = col
     this.icon_row = row
@@ -23,6 +23,10 @@ function FactoryDef(name, col, row, categories, max_ingredients, speed, moduleSl
     this.moduleSlots = moduleSlots
     this.energyUsage = energyUsage
     this.fuel = fuel
+    this.localized_name = localized_name
+    if (!localized_name) {
+        throw new Error('missing localized_name');
+    }
 }
 FactoryDef.prototype = {
     constructor: FactoryDef,
@@ -44,7 +48,7 @@ FactoryDef.prototype = {
         var title = document.createElement("h3")
         var im = getImage(this, true)
         title.appendChild(im)
-        title.appendChild(new Text(formatName(this.name)))
+        title.appendChild(new Text(formatName(this)))
         t.appendChild(title)
         var b
         if (this.max_ing) {
@@ -72,8 +76,8 @@ FactoryDef.prototype = {
     }
 }
 
-function MinerDef(name, col, row, categories, power, speed, moduleSlots, energyUsage, fuel) {
-    FactoryDef.call(this, name, col, row, categories, 0, 0, moduleSlots, energyUsage, fuel)
+function MinerDef(name, col, row, categories, power, speed, moduleSlots, energyUsage, fuel, localized_name) {
+    FactoryDef.call(this, name, col, row, categories, 0, 0, moduleSlots, energyUsage, fuel, localized_name)
     this.mining_power = power
     this.mining_speed = speed
 }
@@ -93,7 +97,7 @@ MinerDef.prototype.renderTooltip = function() {
     var title = document.createElement("h3")
     var im = getImage(this, true)
     title.appendChild(im)
-    title.appendChild(new Text(formatName(this.name)))
+    title.appendChild(new Text(formatName(this)))
     t.appendChild(title)
     var b = document.createElement("b")
     b.textContent = "Energy consumption: "
@@ -119,16 +123,16 @@ MinerDef.prototype.renderTooltip = function() {
     return t
 }
 
-function RocketLaunchDef(name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel) {
-    FactoryDef.call(this, name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel)
+function RocketLaunchDef(name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel, localized_name) {
+    FactoryDef.call(this, name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel, localized_name)
 }
 RocketLaunchDef.prototype = Object.create(FactoryDef.prototype)
 RocketLaunchDef.prototype.makeFactory = function(spec, recipe) {
     return new RocketLaunch(this, spec, recipe)
 }
 
-function RocketSiloDef(name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel) {
-    FactoryDef.call(this, name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel)
+function RocketSiloDef(name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel, localized_name) {
+    FactoryDef.call(this, name, col, row, categories, max_ingredients, speed, moduleSlots, energyUsage, fuel, localized_name)
 }
 RocketSiloDef.prototype = Object.create(FactoryDef.prototype)
 RocketSiloDef.prototype.makeFactory = function(spec, recipe) {
@@ -492,7 +496,7 @@ function renderTooltipBase() {
     var title = document.createElement("h3")
     var im = getImage(this, true)
     title.appendChild(im)
-    title.appendChild(new Text(formatName(this.name)))
+    title.appendChild(new Text(formatName(this)))
     t.appendChild(title)
     return t
 }
@@ -509,7 +513,8 @@ function getFactories(data) {
         one,
         0,
         zero,
-        null
+        null,
+        pumpDef.localized_name,
     )
     pump.renderTooltip = renderTooltipBase
     factories.push(pump)
@@ -523,7 +528,8 @@ function getFactories(data) {
         one,
         0,
         zero,
-        null
+        null,
+        reactorDef.localized_name,
     )
     reactor.renderTooltip = renderTooltipBase
     factories.push(reactor)
@@ -544,7 +550,8 @@ function getFactories(data) {
         one,
         0,
         boiler_energy,
-        "chemical"
+        "chemical",
+        boilerDef.localized_name,
     )
     boiler.renderTooltip = renderTooltipBase
     factories.push(boiler)
@@ -558,7 +565,8 @@ function getFactories(data) {
         one,
         0,
         zero,
-        null
+        null,
+        siloDef.localized_name,
     )
     launch.renderTooltip = renderTooltipBase
     factories.push(launch)
@@ -578,7 +586,8 @@ function getFactories(data) {
                 RationalFromFloat(d.crafting_speed),
                 d.module_slots,
                 RationalFromFloat(d.energy_usage),
-                fuel
+                fuel,
+                d.localized_name,
             ))
         }
     }
@@ -593,7 +602,8 @@ function getFactories(data) {
             RationalFromFloat(d.crafting_speed),
             d.module_slots,
             RationalFromFloat(d.energy_usage),
-            null
+            null,
+            d.localized_name,
         ))
     }
     for (var name in data["mining-drill"]) {
@@ -620,7 +630,8 @@ function getFactories(data) {
             RationalFromFloat(d.mining_speed),
             d.module_slots,
             RationalFromFloat(d.energy_usage),
-            fuel
+            fuel,
+            d.localized_name,
         ))
     }
     return factories

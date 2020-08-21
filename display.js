@@ -13,7 +13,18 @@ See the License for the specific language governing permissions and
 limitations under the License.*/
 "use strict"
 
-function formatName(name) {
+function formatName(proto) {
+    if (typeof proto === 'string') {
+        console.log('FormatName called with string', proto);
+        name = proto;
+    } else {
+        if (proto.localized_name && proto.localized_name.en) {
+            return proto.localized_name.en;
+        }
+        console.log('Object has no localized name', proto);
+        name = proto.name;
+    }
+
     name = name.replace(new RegExp("-", 'g'), " ")
     return name[0].toUpperCase() + name.slice(1)
 }
@@ -170,6 +181,7 @@ function BeltIcon(beltItem, beltSpeed) {
     this.name = this.item.name
     this.icon_col = this.item.icon_col
     this.icon_row = this.item.icon_row
+    this.localized_name = this.item.localized_name;
 }
 BeltIcon.prototype = {
     constructor: BeltIcon,
@@ -179,7 +191,7 @@ BeltIcon.prototype = {
         var title = document.createElement("h3")
         var im = getImage(this, true)
         title.appendChild(im)
-        title.appendChild(new Text(formatName(this.name)))
+        title.appendChild(new Text(formatName(this)))
         t.appendChild(title)
         var b = document.createElement("b")
         b.textContent = "Max throughput: "

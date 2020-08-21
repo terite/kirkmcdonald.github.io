@@ -196,5 +196,5 @@ function renderBoxGraph({nodes, links}, direction, ignore, sheetWidth, sheetHeig
             .on("mouseout", d => GraphMouseLeaveHandler(d))
             .on("click", d => GraphClickHandler(d))
             .append("title")
-                .text(d => formatName(d.name))
+                .text(d => formatName(d))
 }

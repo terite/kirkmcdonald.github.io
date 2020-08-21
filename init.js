@@ -102,6 +102,7 @@ function loadData(modName, settings) {
         settings = {}
     }
     loadDataRunner(modName, function(data) {
+        localizedNameCompat(data)
         getSprites(data)
         var graph = getRecipeGraph(data)
         modules = getModules(data)
@@ -239,4 +240,16 @@ function init() {
     // We don't need to call clickVisualize here, as we will properly render
     // the graph when we call itemUpdate() at the end of initialization.
     clickTab(currentTab)
+}
+
+function localizedNameCompat(data) {
+    if (Array.isArray(data)) {
+        data.forEach(localizedNameCompat);
+    } else if (typeof data === 'object' && data) {
+        if ('localised_name' in data) {
+            data.localized_name = data.localised_name;
+        } else {
+            Object.values(data).forEach(localizedNameCompat);
+        }
+    }
 }

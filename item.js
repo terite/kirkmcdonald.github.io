@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.*/
 "use strict"
 
-function Item(name, col, row, phase, group, subgroup, order) {
+function Item(name, col, row, phase, group, subgroup, order, localized_name) {
     this.name = name
     this.icon_col = col
     this.icon_row = row
@@ -23,6 +23,10 @@ function Item(name, col, row, phase, group, subgroup, order) {
     this.group = group
     this.subgroup = subgroup
     this.order = order
+    this.localized_name = localized_name
+    if (!localized_name) {
+        throw new Error('Cannot make item without localized name')  // TODO des: remove
+    }
 }
 Item.prototype = {
     constructor: Item,
@@ -65,7 +69,7 @@ Item.prototype = {
         var title = document.createElement("h3")
         var im = getImage(this, true)
         title.appendChild(im)
-        title.appendChild(new Text(formatName(this.name)))
+        title.appendChild(new Text(formatName(this)))
         t.appendChild(title)
         if (extra) {
             t.appendChild(extra)
@@ -93,6 +97,7 @@ function getItem(data, items, name) {
             d.group,
             d.subgroup,
             d.order,
+            d.localized_name,
         )
         items[name] = item
         return item
@@ -111,6 +116,9 @@ function getItems(data) {
         "production",
         "energy",
         "f[nuclear-energy]-d[reactor-cycle]",
+        {
+            en: "Nuclear Reactor Cycle"
+        }
     )
     return items
 }
