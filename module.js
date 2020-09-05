@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.*/
 "use strict"
 
-function Module(name, col, row, category, order, productivity, speed, power, limit) {
+function Module(name, col, row, category, order, productivity, speed, power, limit, localized_name) {
     // Other module effects not modeled by this calculator.
     this.name = name
     this.icon_col = col
@@ -28,6 +28,10 @@ function Module(name, col, row, category, order, productivity, speed, power, lim
         for (var i = 0; i < limit.length; i++) {
             this.limit[limit[i]] = true
         }
+    }
+    this.localized_name = localized_name
+    if (!localized_name) {
+        throw new Error('Module missing localized name'); // TODO des: remove
     }
 }
 Module.prototype = {
@@ -56,7 +60,7 @@ Module.prototype = {
         var title = document.createElement("h3")
         var im = getImage(this, true)
         title.appendChild(im)
-        title.appendChild(new Text(formatName(this.name)))
+        title.appendChild(new Text(formatName(this)))
         t.appendChild(title)
         var b
         var hundred = RationalFromFloat(100)
@@ -174,7 +178,8 @@ function getModules(data) {
             productivity,
             speed,
             power,
-            limit
+            limit,
+            item.localized_name,
         )
     }
     return modules

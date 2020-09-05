@@ -35,6 +35,9 @@ function OutputRecipe() {
         this.ingredients.push(ing)
     }
     this.products = []
+    this.localized_name = {
+        en: 'Output',
+    }
 }
 
 function SurplusRecipe(totals) {
@@ -185,6 +188,7 @@ class GraphNode {
         this.factory = factory ? factory.factory : null
         this.count = count
         this.rate = rate
+        this.localized_name = recipe.localized_name
         //this.edgeHighlighters = []
     }
     links() {
@@ -451,13 +455,13 @@ function linkPath(d) {
 function linkTitle(d) {
     let itemName = ""
     if (d.source.name !== d.item.name) {
-        itemName = `${formatName(d.item.name)} \u00d7 `
+        itemName = `${formatName(d.item)} \u00d7 `
     }
     let fuel = ""
     if (d.fuel) {
         fuel = " (fuel)"
     }
-    return `${formatName(d.source.name)} \u2192 ${formatName(d.target.name)}${fuel}\n${itemName}${displayRate(d.rate)}/${rateName}`
+    return `${formatName(d.source)} \u2192 ${formatName(d.target)}${fuel}\n${itemName}${displayRate(d.rate)}/${rateName}`
 }
 
 function renderGraph(totals, ignore) {
@@ -659,5 +663,5 @@ function renderGraph(totals, ignore) {
             .on("mouseout", d => GraphMouseLeaveHandler(d.node))
             .on("click", d => GraphClickHandler(d.node))
             .append("title")
-                .text(d => formatName(d.node.name))
+                .text(d => formatName(d.node))
 }

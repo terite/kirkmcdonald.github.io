@@ -37,7 +37,7 @@ function makeIngredient(data, i, items) {
     return new Ingredient(RationalFromFloat(amount), getItem(data, items, name))
 }
 
-function Recipe(name, col, row, category, time, ingredients, products) {
+function Recipe(name, col, row, category, time, ingredients, products, localized_name) {
     this.name = name
     this.icon_col = col
     this.icon_row = row
@@ -50,6 +50,10 @@ function Recipe(name, col, row, category, time, ingredients, products) {
     this.products = products
     for (var i = 0; i < products.length; i++) {
         products[i].item.addRecipe(this)
+    }
+    this.localized_name = localized_name
+    if (!localized_name) {
+        throw new Error('Recipe missing localized_name');
     }
     this.displayGroup = null
     this.solveGroup = null
@@ -106,7 +110,7 @@ Recipe.prototype = {
         var title = document.createElement("h3")
         var im = getImage(this, true)
         title.appendChild(im)
-        var name = formatName(this.name)
+        var name = formatName(this)
         if (this.products.length === 1 && this.products[0].item.name === this.name && one.less(this.products[0].amount)) {
             name = this.products[0].amount.toDecimal() + " \u00d7 " + name
         }
@@ -146,7 +150,7 @@ Recipe.prototype = {
             p.classList.add("product")
             p.appendChild(getImage(ing.item, true))
             t.appendChild(p)
-            t.appendChild(new Text("\u00A0" + ing.amount.toDecimal() + " \u00d7 " + formatName(ing.item.name)))
+            t.appendChild(new Text("\u00A0" + ing.amount.toDecimal() + " \u00d7 " + formatName(ing.item)))
         }
         return t
     }
@@ -162,24 +166,24 @@ function makeRecipe(data, d, items) {
     for (var i=0; i < d.ingredients.length; i++) {
         ingredients.push(makeIngredient(data, d.ingredients[i], items))
     }
-    return new Recipe(d.name, d.icon_col, d.icon_row, d.category, time, ingredients, products)
+    return new Recipe(d.name, d.icon_col, d.icon_row, d.category, time, ingredients, products, d.localized_name)
 }
 
 function ResourceRecipe(item) {
-    Recipe.call(this, item.name, item.icon_col, item.icon_row, null, zero, [], [new Ingredient(one, item)])
+    Recipe.call(this, item.name, item.icon_col, item.icon_row, null, zero, [], [new Ingredient(one, item)], item.localized_name)
 }
 ResourceRecipe.prototype = Object.create(Recipe.prototype)
 ResourceRecipe.prototype.makesResource = function() {
     return true
 }
 
-function MiningRecipe(name, col, row, category, hardness, mining_time, ingredients, products) {
+function MiningRecipe(name, col, row, category, hardness, mining_time, ingredients, products, localized_name) {
     this.hardness = hardness
     this.mining_time = mining_time
     if (!ingredients) {
         ingredients = []
     }
-    Recipe.call(this, name, col, row, category, zero, ingredients, products)
+    Recipe.call(this, name, col, row, category, zero, ingredients, products, localized_name)
 }
 MiningRecipe.prototype = Object.create(Recipe.prototype)
 MiningRecipe.prototype.makesResource = function() {
@@ -204,7 +208,8 @@ function getRecipeGraph(data) {
         "water",
         RationalFromFloats(1, 1200),
         [],
-        [new Ingredient(one, water)]
+        [new Ingredient(one, water)],
+        water.localized_name,
     )
     var reactor = data.items["nuclear-reactor"]
     recipes["nuclear-reactor-cycle"] = new Recipe(
@@ -217,7 +222,8 @@ function getRecipeGraph(data) {
         [
             new Ingredient(one, getItem(data, items, "used-up-uranium-fuel-cell")),
             new Ingredient(one, items["nuclear-reactor-cycle"]),
-        ]
+        ],
+        water.localized_name,
     )
     var rocket = data.items["rocket-silo"]
     recipes["rocket-launch"] = new Recipe(
@@ -229,7 +235,8 @@ function getRecipeGraph(data) {
         [
             new Ingredient(RationalFromFloat(100), getItem(data, items, "rocket-part")),
             new Ingredient(one, getItem(data, items, "satellite"))
-        ], [new Ingredient(RationalFromFloat(1000), getItem(data, items, "space-science-pack"))]
+        ], [new Ingredient(RationalFromFloat(1000), getItem(data, items, "space-science-pack"))],
+        water.localized_name,
     )
     var steam = data.items["steam"]
     recipes["steam"] = new Recipe(
@@ -239,7 +246,8 @@ function getRecipeGraph(data) {
         "boiler",
         RationalFromFloats(1, 60),
         [new Ingredient(one, getItem(data, items, "water"))],
-        [new Ingredient(one, getItem(data, items, "steam"))]
+        [new Ingredient(one, getItem(data, items, "steam"))],
+        water.localized_name,
     )
 
     for (var name in data.recipes) {
@@ -286,7 +294,8 @@ function getRecipeGraph(data) {
             hardness,
             RationalFromFloat(props.mining_time),
             ingredients,
-            products
+            products,
+            entity.localized_name,
         )
     }
     for (var itemName in items) {
