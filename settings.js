@@ -24,6 +24,7 @@ function Modification(name, filename, legacy, sheetSize) {
 var MODIFICATIONS = {
     "1-0-0": new Modification("Vanilla 1.0.0", "vanilla-1.0.0.json", false, [480, 512]),
     "1-0-0x": new Modification("Vanilla 1.0.0 - Expensive", "vanilla-1.0.0-expensive.json", false, [480, 512]),
+    "krastorio2": new Modification("Krastorio2 1.0.0", "krastorio2-1.0.0.json", false, [800, 864]),
 }
 
 var DEFAULT_MODIFICATION = "1-0-0"
