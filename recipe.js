@@ -194,7 +194,13 @@ MiningRecipe.prototype.allModules = function() {
 }
 
 function ignoreRecipe(d) {
-    return d.subgroup == "empty-barrel"
+    if (d.subgroup == "empty-barrel") {
+        return true;
+    }
+
+    // void recipe
+    var hasResults = d.results.some(r => r.amount > 0 || r.amount_min > 0)
+    return !hasResults;
 }
 
 function getRecipeGraph(data) {
